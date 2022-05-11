@@ -21,6 +21,8 @@ function ball(startingPositionX,startingPositionY, diameter, startingSpeedX, sta
   this.rightBall = this.positionX + this.ray;
   this.bottomBall = this.positionY + this.ray;
   /* Configurações da bola de tênis */
+
+  this.soundColide = loadSound("assets/mp3/raquetada.mp3");
 }
 
 /* Função que irá criar a bola de tênis na tela */
@@ -46,7 +48,7 @@ ball.prototype.move = function() {
 /* Função que faz mudar a direção da bola de tênis */
 ball.prototype.direction = function(changeX = false, changeY = false) {
   if(changeX){ 
-    this.speedX *= -1; 
+    this.speedX *= -1;
   }
   if(changeY){
     this.speedY *= -1;
@@ -68,7 +70,7 @@ ball.prototype.checkCorner = function(widthScreen, heightScreen){
 /* Função que checamos se a bola de tenis toca na borda da tela e chamamos a função de mudar de direção */
 
 /* Função que checamos se a bola de tênis bate na raquete de tênis e mudamos de direção */
-ball.prototype.checkRacket = function(racket){
+ball.prototype.checkRacket = function(racket, raqueteOponente){
 
   if(
     this.leftBall < racket.rightRacket &&
@@ -76,14 +78,17 @@ ball.prototype.checkRacket = function(racket){
     this.bottomBall > racket.topRacket
   ){
     this.direction(true);
+    this.soundColide.play();
   }
 
   if(
-      this.rightBall < racket.leftRacket &&
-      this.topBall < racket.bottomRacket &&
-      this.bottomBall > racket.topRacket
+      this.rightBall > raqueteOponente.leftRacket &&
+      this.topBall < raqueteOponente.bottomRacket &&
+      this.bottomBall > raqueteOponente.topRacket
   ){
     this.direction(true);
+    this.soundColide.play();
+
   }
 
 }
